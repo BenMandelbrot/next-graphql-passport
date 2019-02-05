@@ -55,7 +55,7 @@ const startServer = async () => {
       {
         clientID: process.env.GITHUB_ID,
         clientSecret: process.env.GITHUB_SECRET,
-        callbackURL: "http://127.0.0.1:4000/auth/github/callback"
+        callbackURL: "http://localhost:4000/auth/github/callback"
       },
       async (accessToken, refreshToken, profile, cb) => {
         // don't worry about registering user
@@ -87,7 +87,7 @@ const startServer = async () => {
         req.session.accessToken = req.user.accessToken;
         req.session.refreshToken = req.user.refreshToken;
       }
-      res.redirect("http://127.0.0.1:3000/");
+      res.redirect("http://localhost:3000/");
     }
   );
 
