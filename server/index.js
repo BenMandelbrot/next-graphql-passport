@@ -95,9 +95,7 @@ const startServer = async () => {
 
   app.listen({ port: 4000 }, () =>
     console.log(
-      `🚀 Server ready at ${process.env.SERVER_URL}:4000${
-        apolloServer.graphqlPath
-      }`
+      `🚀 Server ready at ${process.env.SERVER_URL}${apolloServer.graphqlPath}`
     )
   );
 };
