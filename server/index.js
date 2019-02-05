@@ -55,7 +55,7 @@ const startServer = async () => {
       {
         clientID: process.env.GITHUB_ID,
         clientSecret: process.env.GITHUB_SECRET,
-        callbackURL: "http://localhost:4000/auth/github/callback"
+        callbackURL: process.env.GITHUB_CALLBACK_URL
       },
       async (accessToken, refreshToken, profile, cb) => {
         // don't worry about registering user
@@ -87,7 +87,7 @@ const startServer = async () => {
         req.session.accessToken = req.user.accessToken;
         req.session.refreshToken = req.user.refreshToken;
       }
-      res.redirect("http://localhost:3000/");
+      res.redirect(process.env.FRONTEND_URL);
     }
   );
 
@@ -95,7 +95,9 @@ const startServer = async () => {
 
   app.listen({ port: 4000 }, () =>
     console.log(
-      `🚀 Server ready at http://localhost:4000${apolloServer.graphqlPath}`
+      `🚀 Server ready at ${process.env.SERVER_URL}:4000${
+        apolloServer.graphqlPath
+      }`
     )
   );
 };

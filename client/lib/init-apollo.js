@@ -23,7 +23,7 @@ function create(initialState, { getToken }) {
   };
 
   const httpLink = createHttpLink({
-    uri: "http://localhost:4000/graphql",
+    uri: `${process.env.SERVER_URL}/graphql`,
     credentials: true
   });
 
