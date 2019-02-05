@@ -1,7 +1,7 @@
-import { ApolloClient, InMemoryCache } from 'apollo-boost';
-import { setContext } from 'apollo-link-context';
-import { createHttpLink } from 'apollo-link-http';
-import fetch from 'isomorphic-unfetch';
+import { ApolloClient, InMemoryCache } from "apollo-boost";
+import { setContext } from "apollo-link-context";
+import { createHttpLink } from "apollo-link-http";
+import fetch from "isomorphic-unfetch";
 
 let apolloClient = null;
 
@@ -13,18 +13,18 @@ if (!process.browser) {
 function create(initialState, { getToken }) {
   const defaultOptions = {
     watchQuery: {
-      fetchPolicy: 'no-cache',
-      errorPolicy: 'ignore'
+      fetchPolicy: "no-cache",
+      errorPolicy: "ignore"
     },
     query: {
-      fetchPolicy: 'no-cache',
-      errorPolicy: 'all'
+      fetchPolicy: "no-cache",
+      errorPolicy: "all"
     }
   };
 
   const httpLink = createHttpLink({
-    uri: 'http://localhost:4000/graphql',
-    credentials: 'include'
+    uri: "http://localhost:4000/graphql",
+    credentials: true
   });
 
   const authLink = setContext((_, { headers }) => {
@@ -32,7 +32,7 @@ function create(initialState, { getToken }) {
     return {
       headers: {
         ...headers,
-        authorization: token ? `Bearer ${token}` : ''
+        authorization: token ? `Bearer ${token}` : ""
       }
     };
   });

@@ -1,14 +1,14 @@
-import express from 'express';
-import cors from 'cors';
-import session from 'express-session';
-import apolloServer from './apolloServer';
+import cors from "cors";
+import express from "express";
+import session from "express-session";
+import passport from "passport";
+import apolloServer from "./apolloServer";
+import { redis } from "./redis";
 
-import passport from 'passport';
-const GithubStrategy = require('passport-github').Strategy;
+const GithubStrategy = require("passport-github").Strategy;
 
-const RedisStore = require('connect-redis')(session);
-import { redis } from './redis';
-require('dotenv').config();
+const RedisStore = require("connect-redis")(session);
+require("dotenv").config();
 
 const startServer = async () => {
   const app = express();
@@ -16,7 +16,7 @@ const startServer = async () => {
   app.use(
     cors({
       credentials: true,
-      origin: 'http://localhost:3000'
+      origin: true
     })
   );
 
@@ -25,7 +25,7 @@ const startServer = async () => {
 
     if (authorization) {
       try {
-        const qid = authorization.split(' ')[1];
+        const qid = authorization.split(" ")[1];
         req.headers.cookie = `qid=${qid}`;
       } catch (_) {}
     }
@@ -38,13 +38,13 @@ const startServer = async () => {
       store: new RedisStore({
         client: redis
       }),
-      name: 'qid',
-      secret: 'asdasdada',
+      name: "qid",
+      secret: "asdasdada",
       resave: false,
       saveUninitialized: false,
       cookie: {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: process.env.NODE_ENV === "production",
         maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
       }
     })
@@ -55,7 +55,7 @@ const startServer = async () => {
       {
         clientID: process.env.GITHUB_ID,
         clientSecret: process.env.GITHUB_SECRET,
-        callbackURL: 'http://127.0.0.1:4000/auth/github/callback'
+        callbackURL: "http://127.0.0.1:4000/auth/github/callback"
       },
       async (accessToken, refreshToken, profile, cb) => {
         // don't worry about registering user
@@ -75,18 +75,19 @@ const startServer = async () => {
   );
 
   app.use(passport.initialize());
-  app.get('/auth/github', passport.authenticate('github', { session: false }));
+  app.use(passport.session());
+  app.get("/auth/github", passport.authenticate("github", { session: false }));
   app.get(
-    '/auth/github/callback',
-    passport.authenticate('github', { session: false }),
+    "/auth/github/callback",
+    passport.authenticate("github", { session: false }),
     (req, res) => {
       if (req.user.user.id) {
-        console.log('SET REQ Session');
+        console.log("SET REQ Session");
         req.session.userId = req.user.user.id;
         req.session.accessToken = req.user.accessToken;
         req.session.refreshToken = req.user.refreshToken;
       }
-      res.redirect('http://localhost:3000/');
+      res.redirect("http://127.0.0.1:3000/");
     }
   );
 
