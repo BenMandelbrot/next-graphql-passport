@@ -1,9 +1,9 @@
-import { ApolloServer } from 'apollo-server-express';
-import { fileLoader, mergeResolvers, mergeTypes } from 'merge-graphql-schemas';
-import path from 'path';
+import { ApolloServer } from "apollo-server-express";
+import { fileLoader, mergeResolvers, mergeTypes } from "merge-graphql-schemas";
+import path from "path";
 
-const typesArray = fileLoader(path.join(__dirname, './types'));
-const resolversArray = fileLoader(path.join(__dirname, './resolvers'));
+const typesArray = fileLoader(path.join(__dirname, "./types"));
+const resolversArray = fileLoader(path.join(__dirname, "./resolvers"));
 
 const SERVER = new ApolloServer({
   typeDefs: mergeTypes(typesArray, { all: true }),
@@ -13,7 +13,8 @@ const SERVER = new ApolloServer({
   playground: {
     endpoint: `/graphql`,
     settings: {
-      'editor.theme': 'light'
+      "editor.theme": "light",
+      "request.credentials": "include"
     }
   },
   context: ({ req }) => {

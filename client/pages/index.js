@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { Mutation } from 'react-apollo';
-import { gql } from 'apollo-boost';
-import Link from 'next/link';
+import { gql } from "apollo-boost";
+import Link from "next/link";
+import React, { Component } from "react";
+import { Mutation } from "react-apollo";
 
 const registerMutation = gql`
   mutation($username: String!, $password: String!) {
@@ -11,8 +11,8 @@ const registerMutation = gql`
 
 class App extends Component {
   state = {
-    username: '',
-    password: ''
+    username: "",
+    password: ""
   };
 
   onChange = e => {
@@ -54,7 +54,9 @@ class App extends Component {
                 <a>to auth page</a>
               </Link>
               <br />
-              <a href="http://localhost:4000/auth/github">login with github</a>
+              <a href={`${process.env.SERVER_URL}/auth/github`}>
+                login with github
+              </a>
             </div>
           </div>
         )}
